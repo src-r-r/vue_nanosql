@@ -15,14 +15,6 @@ import TodoIconVue from "./icon/TodoIcon.vue";
 
 const emit = defineEmits(["check", "moveUp", "moveDown"]);
 
-const data = reactive({
-  itemState: null,
-  cssClass: "",
-} as {
-  itemState: Component | null;
-  cssClass: string;
-});
-
 const prop = defineProps({
   item: {
     type: TodoItem,
@@ -32,12 +24,6 @@ const prop = defineProps({
     type: Number,
     requried: true,
   },
-});
-
-onBeforeMount(async () => {
-  if (!prop.item) return;
-  data.itemState = prop.item.is_complete ? DoneIconVue : TodoIconVue;
-  data.cssClass = prop.item.is_complete ? "crossout" : "";
 });
 </script>
 

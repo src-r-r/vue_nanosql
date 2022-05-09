@@ -19,6 +19,10 @@ const data = reactive({
   lists: TodoList[];
 });
 
+onBeforeMount(async () => {
+  data.lists = await TodoList.filter<TodoList>([]);
+});
+
 // This is where we handle the events.
 
 async function addList() {
@@ -55,9 +59,6 @@ async function onCheck(item: TodoItem) {
   console.log(`onCheck`);
   item.is_complete = !item.is_complete;
   await item.save();
-  // Go through the list store & update the current item.
-  // This way we don't have refetch everything
-  // ls.items = ls.items.map((i) => (i.id == item.id ? item : i));
 }
 
 async function onRenameList(name: string) {
@@ -66,10 +67,6 @@ async function onRenameList(name: string) {
   await data.currentList.save();
   ls.listTitle = data.currentList.name;
 }
-
-onBeforeMount(async () => {
-  data.lists = await TodoList.filter<TodoList>([]);
-});
 </script>
 
 <template lang="pug">

@@ -1,49 +1,52 @@
 import { nSQL } from "@nano-sql/core";
-import {
-  instanceToPlain,
-  plainToInstance,
-  Type,
-  type ClassConstructor,
-} from "class-transformer";
-import { map } from "lodash";
+import { instanceToPlain } from "class-transformer";
 
+// We'll define an ID time in case we want to
+// change it to a different data type later, like UUID
 export type Id = number | null;
 
-export interface Updatable {
-  update(): void;
-}
+export const DB_NAME = "vue_nsql";
 
 export abstract class Model {
   public id: Id;
 
-  public static window: Window | undefined;
-  public mWindow: Window | undefined;
+  // This is the `id` column
 
   public static ID = "id";
 
+  // Returns the name of the table.
   static get TABLE(): void | string {
     throw new Error(`Not implemented: ${this.name}.TABLE`);
   }
 
+  // converts the object returned from the database into a
+  // typescript class. this MUST be done on a per-implementation
+  // basis to ensure all methods are "captured"
   static convert(instance: object): unknown {
     throw new Error(`Not implemented: ${this.name}.convert`);
   }
+
+  // This will be included in the child `TABLE_DEF` objects.
+  // Don't be scared by the syntax. In the end all this
+  // resolves to is {`id:int` : {pk : true, ai : true}}
 
   public static BASE_DEF = {
     [`${Model.ID}:int`]: { pk: true, ai: true },
   };
 
-  static get INDEXES() {
-    return {};
-  }
-
   constructor(id: Id | null = null) {
     this.id = id;
   }
 
+  // Just a bit of housekeeping.
+  // This is in case another databsae is selected we'll always
+  // get back to our test database.
+  //
+  // I would not recommend for production environments.
+
   async ensureDb() {
-    if (nSQL().listDatabases().indexOf("augustine") >= 0) return;
-    await nSQL().useDatabase("augustine").connect();
+    if (nSQL().listDatabases().indexOf(DB_NAME) >= 0) return;
+    await nSQL().useDatabase(DB_NAME).connect();
   }
 
   async save() {
@@ -54,6 +57,10 @@ export abstract class Model {
     await nSQL(table).query("upsert", [data]).exec();
   }
 
+  // We have to do a bit of fancy footwork here.
+  // Since this "current" Model has no notion of what the subclasses are,
+  // We have to call each subclass's `convert` method in order to
+  // return the appropriate class.
   public static async filter<Type>(
     where: unknown[] = [],
     orderBy: string[] = []
