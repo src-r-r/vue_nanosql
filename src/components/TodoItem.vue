@@ -9,7 +9,6 @@ div.row
 
 <script setup="" lang="ts">
 import { TodoItem } from "@/models/todoitem";
-import { reactive, type Component, onBeforeMount } from "vue";
 import DoneIconVue from "./icon/DoneIcon.vue";
 import TodoIconVue from "./icon/TodoIcon.vue";
 

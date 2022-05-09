@@ -13,6 +13,8 @@ div
           ul.navbar-nav.me-auto.mb-2.mb-lg-0
             li.nav-item
               RouterLink.nav-link(to="/") Home
+            li.nav-item
+              RouterLink.nav-link(to="/maintenance") Maintenance
   .container-fluid
     RouterView
 </template>

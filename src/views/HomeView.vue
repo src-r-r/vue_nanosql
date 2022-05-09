@@ -70,10 +70,10 @@ async function onRenameList(name: string) {
 </script>
 
 <template lang="pug">
-main.main
+main.main.p-4
   .container
     form(@submit.prevent="addList")
-      .row.mb-3.container-fluid
+      .row.mb-4.container-fluid
         .col
           input.form-control(type="text" v-model="data.newListName")
         .col
