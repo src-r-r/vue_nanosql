@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
-import bootstrap from "bootstrap";
 </script>
 
-<template>
-  <header>
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+<template lang="pug">
+div
+  header.header
+    nav.navbar.navbar-expand-lg.navbar-light.bg-light
+      .container-fluid
+        .navbar-brand
+          div To Do List
+        .collapse.navbar-collapse
+          ul.navbar-nav.me-auto.mb-2.mb-lg-0
+            li.nav-item
+              RouterLink.nav-link(to="/") Home
+  .container-fluid
+    RouterView
 </template>

@@ -1,8 +1,8 @@
 <template lang="pug">
 select.form-select(v-if="prop.lists.length"
                     aria-label="Select a List"
-                    v-model="data.current"
-                    @change='emit("change", data.current)')
+                    v-model="ls.currentListId"
+                    @change='emit("change", ls.currentListId)')
     option(:value="list.id"
            v-for="list in prop.lists") {{ list.name }}
 </template>
@@ -26,6 +26,6 @@ const data = reactive({
 });
 
 onBeforeMount(() => {
-  data.current = ls.currentId;
+  data.current = ls.currentListId;
 });
 </script>
